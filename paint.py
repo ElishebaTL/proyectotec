@@ -8,11 +8,13 @@ Exercises
 4. Complete triangle.
 5. Add width parameter.
 """
+""" first modification by eli"""
 
 from turtle import *
 
 from freegames import vector
 
+"""second comment by eli""" 
 
 def line(start, end):
     """Draw line from start to end."""
