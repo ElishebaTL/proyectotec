@@ -1,3 +1,4 @@
+""" elipacman"""
 """Pacman, classic arcade game.
 
 Exercises
