@@ -1,12 +1,13 @@
 """Pacman, classic arcade game.
 
-Exercises
+Equipo 2:
+    Elisheba Hannai Trejo Leyva
+    Angel Gabriel Arce Martinez
 
-1. Change the board.
-2. Change the number of ghosts.
-3. Change where pacman starts.
-4. Make the ghosts faster/slower.
-5. Make the ghosts smarter.
+Cambios
+1. Los fantasmas sean más listos
+2. Cambiar el tablero
+3. Hacer que los fantasmas vayan mas rápido
 """
 
 from random import choice
@@ -28,9 +29,9 @@ ghosts = [
 # fmt: off
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
-    0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
@@ -42,12 +43,14 @@ tiles = [
     0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
     0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0,
     0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]
+"""modificamos algunos números en tiles para cambiar el layout del juego"""
+
 # fmt: on
 
 
@@ -118,7 +121,6 @@ def move():
         pacman.move(aim)
 
     index = offset(pacman)
-
     if tiles[index] == 1:
         tiles[index] = 2
         state['score'] += 1
@@ -130,20 +132,34 @@ def move():
     goto(pacman.x + 10, pacman.y + 10)
     dot(20, 'yellow')
 
-    for point, course in ghosts:
+    # Mueve cada fantasma
+    for ghost in ghosts:
+        point, course = ghost
         if valid(point + course):
+            # Si el siguiente movimiento es válido, continúa en la dirección actual.
             point.move(course)
         else:
-            options = [
-                vector(5, 0),
-                vector(-5, 0),
-                vector(0, 5),
-                vector(0, -5),
-            ]
-            plan = choice(options)
+            # Si el siguiente movimiento está bloqueado, calcula una nueva dirección hacia Pacman
+            dx = pacman.x - point.x
+            dy = pacman.y - point.y
+
+            # Elige la dirección que minimice la distancia a Pacman.
+            if abs(dx) > abs(dy):
+                if dx > 0:
+                    plan = vector(5, 0)  # Mover a la derecha
+                else:
+                    plan = vector(-5, 0)  # Mover a la izquierda
+            else:
+                if dy > 0:
+                    plan = vector(0, 5)  # Moverse hacia arriba
+                else:
+                    plan = vector(0, -5)  # moverse hacia abajo
+
+            # Update the ghost's course to the new direction
             course.x = plan.x
             course.y = plan.y
 
+        # Dibuja el fantasma en su nueva posición.
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
@@ -154,7 +170,9 @@ def move():
         if abs(pacman - point) < 20:
             return
 
-    ontimer(move, 100)
+    ontimer(move, 70)
+    """cambiamos ontimer(move,100) a ontimer(move,70)
+    para que los fantasmas vayan más rápido"""
 
 
 def change(x, y):
