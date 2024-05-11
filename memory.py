@@ -7,6 +7,10 @@ Equipo 2:
 Cambios
 1. Contar y desplegar el numero de taps
 2. Detectar cuando todos los cuadros se han destapado
+3. Central el dígito en el cuadro
+4. Como un condimento de innovación al juego, Podrías utilizar
+    algo diferente a los dígitos para resolver el juego y que al
+    usuario le ayude a tener mejor memoria ?
 """
 
 from random import *
@@ -15,7 +19,9 @@ from turtle import *
 from freegames import path
 
 car = path('car.gif')
-tiles = list(range(32)) * 2
+""" Usamos números del 0 al 31 para las letras del 1 al 9 y
+del 10 al 41 para las letras a partir del 10"""
+tiles = [i for i in range(32)] * 2
 state = {'mark': None}
 hide = [True] * 64
 tap_count = 0  # Variable to count taps
@@ -81,9 +87,14 @@ def draw():
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
-        goto(x + 2, y)
+        goto(x + 25, y )
+        """Ajustar las coordenadas para centrar mejor el elemento"""
         color('black')
-        write(tiles[mark], font=('Arial', 30, 'normal'))
+        num_or_letter = tiles[mark]
+        if num_or_letter < 10:
+            write(str(num_or_letter), align='center', font=('Arial', 30, 'normal'))
+        else:
+            write(chr(num_or_letter + 55), align='center', font=('Arial', 30, 'normal'))
 
     update()
     ontimer(draw, 100)
