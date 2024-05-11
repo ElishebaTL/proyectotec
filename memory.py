@@ -6,6 +6,7 @@ Equipo 2:
 
 Cambios
 1. Contar y desplegar el numero de taps
+2. Detectar cuando todos los cuadros se han destapado
 """
 
 from random import *
@@ -57,6 +58,10 @@ def tap(x, y):
         state['mark'] = None
         tap_count += 1  # Incrementar el recuento de toques
         print("Number of taps:", tap_count)
+
+        # Comprueba si todos los mosaicos están revelados.
+        if all(not tile_hidden for tile_hidden in hide):
+            print("All tiles revealed!")
 
 
 def draw():
