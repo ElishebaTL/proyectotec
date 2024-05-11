@@ -1,12 +1,11 @@
 """Memory, puzzle game of number pairs.
 
-Exercises:
+Equipo 2:
+    Elisheba Hannai Trejo Leyva
+    Angel Gabriel Arce Martinez
 
-1. Count and print how many taps occur.
-2. Decrease the number of tiles to a 4x4 grid.
-3. Detect when all tiles are revealed.
-4. Center single-digit tile.
-5. Use letters instead of tiles.
+Cambios
+1. Contar y desplegar el numero de taps
 """
 
 from random import *
@@ -18,6 +17,7 @@ car = path('car.gif')
 tiles = list(range(32)) * 2
 state = {'mark': None}
 hide = [True] * 64
+tap_count = 0  # Variable to count taps
 
 
 def square(x, y):
@@ -44,7 +44,8 @@ def xy(count):
 
 
 def tap(x, y):
-    """Update mark and hidden tiles based on tap."""
+    """Update mark, hidden tiles, and tap count based on tap."""
+    global tap_count  # Para modificar la variable global.
     spot = index(x, y)
     mark = state['mark']
 
@@ -54,6 +55,8 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
+        tap_count += 1  # Incrementar el recuento de toques
+        print("Number of taps:", tap_count)
 
 
 def draw():
