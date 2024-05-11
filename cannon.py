@@ -72,9 +72,7 @@ def move():
 
     draw()
 
-    for target in targets:
-        if not inside(target):
-            return
+"""eliminacion de las condiciones hace que sea loop"""
 
     ontimer(move, 50)
 
